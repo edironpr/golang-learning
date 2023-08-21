@@ -106,6 +106,187 @@ func main() {
 
 	names := [5]string{1: "Jack", 3: "Alice"}
 	fmt.Println(names)
+
+	// ** 指针 **
+
+	// 取址符
+	var aa int = 1
+	println("the address of variable 'a' is", &aa)
+
+	// 指针类型
+	bb := 1.2
+	var aaP *int = &aa
+	var bbP *float64 = &bb
+	println("the address 'aaP' is", aaP)
+	println("the address 'bbP' is", bbP)
+
+	// 指针所指变量的值
+	println("the value of aaP point is", *aaP)
+	println("the value of bbP point is", *bbP)
+
+	// 空指针
+	var nptr *int
+	println(nptr)
+	println(nptr == nil)
+	println(nptr != nil)
+
+	// 指针数组
+	const arrSize = 3
+	arr := [arrSize]int{1, 10, 100}
+	var arrPtr [arrSize]*int
+
+	for i := 0; i < arrSize; i++ {
+		arrPtr[i] = &arr[i]
+		fmt.Printf("arr[%d] = %d\n", i, *arrPtr[i])
+	}
+
+	// 指针的指针
+	var z int
+	var zPtr *int
+	var zPptr **int
+
+	z = 18
+	zPtr = &z
+	zPptr = &zPtr
+
+	println(z)
+	println(*zPtr)
+	println(**zPptr)
+
+	// 指针参数
+	s1 := 100
+	s2 := 200
+	fmt.Printf("s1 = %d, s2 = %d\n", s1, s2)
+
+	swap2(&s1, &s2)
+
+	fmt.Printf("s1 = %d, s2 = %d\n", s1, s2)
+
+	// ** 结构体 **
+
+	// 定义
+	fmt.Println(Book{"A", "jack", "Go", 1})
+	fmt.Println(Book{title: "B", author: "tom", subject: "Go", id: 2})
+	fmt.Println(Book{title: "C", author: "alice"})
+
+	// 访问成员
+	var book1 Book
+	book1.title = "Go Tutorial"
+	book1.author = "ed"
+	book1.subject = "GO"
+	book1.id = 3
+	fmt.Println(book1)
+
+	book2 := Book{"Go Practice", "ed", "GO", 4}
+	fmt.Println(book2.title, book2.author, book2.subject, book2.id)
+
+	// 函数参数
+	printBook(Book{"L&P", "ed", "drama", 5})
+
+	// 结构体指针
+	var bookPtr *Book
+	bookPtr = &book1
+	println("the title of the book1 is", bookPtr.title)
+	printBook2(&book2)
+
+	// ** 切片 **
+
+	// 定义
+	var slice1 []int
+	var slice2 = make([]int, 10)
+	slice3 := make([]string, 5)
+	fmt.Println(slice1)
+	printSlice(slice1)
+	fmt.Println(slice2)
+	printSlice(slice2)
+	fmt.Println(slice3)
+
+	// 初始化
+	slice4 := arr[:]
+	fmt.Println(slice4)
+	printSlice(slice4)
+	slice5 := arr[0:2]
+	fmt.Println(slice5)
+	slice6 := arr[1:]
+	fmt.Println(slice6)
+	slice7 := arr[:1]
+	fmt.Println(slice7)
+	slice8 := make([]int, 2, 5)
+	fmt.Println(slice8)
+
+	// len() cap() 函数
+	sli1 := make([]int, 3, 5)
+	printSlice(sli1)
+
+	// 空切片
+	var sli2 []int
+	if sli2 == nil {
+		println("sil2 is nil")
+	}
+	printSlice(sli2)
+
+	// 切片截取
+	numbers := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
+	printSlice(numbers)
+	fmt.Println(numbers)
+	fmt.Println(numbers[1:4])
+	fmt.Println(numbers[:3])
+	fmt.Println(numbers[4:])
+	printSlice(numbers[:2])
+	printSlice(numbers[2:5])
+
+	numbers1 := make([]int, 0, 5)
+	printSlice(numbers1)
+
+	// append() copy() 函数
+	numbers = append(numbers, 0)
+	printSlice(numbers)
+	numbers = append(numbers, 1)
+	printSlice(numbers)
+	numbers = append(numbers, 1, 2, 3)
+	printSlice(numbers)
+
+	copyNumbers := make([]int, len(numbers), cap(numbers)*2)
+	printSlice(copyNumbers)
+	copyNumbers1 := make([]int, 5, cap(numbers)*2)
+	copy(copyNumbers1, numbers)
+	printSlice(copyNumbers1)
+
+	copy(copyNumbers, numbers)
+	printSlice(copyNumbers)
+
+	// ** Map 集合 **
+
+	// 定义
+	var map1 map[string]string
+	map1 = make(map[string]string)
+	map1["CN"] = "China"
+	map1["AM"] = "America"
+	map1["HK"] = "HongKong"
+	map1["JP"] = "Japan"
+
+	for k, v := range map1 {
+		fmt.Printf("%s -> %s\n", k, v)
+	}
+
+	v1, exist1 := map1["CN"]
+	println(v1, exist1)
+	v2, exist2 := map1["TW"]
+	println(v2, exist2)
+
+	// delete 函数
+	delete(map1, "HK")
+
+	for k, v := range map1 {
+		fmt.Printf("%s -> %s\n", k, v)
+	}
+
+	// ** 类型转换 **
+	var count int = 4
+	var sum int = 10
+	var devideRes float64
+	devideRes = float64(sum) / float64(count)
+	fmt.Printf("%f\n", devideRes)
 }
 
 func max(n1, n2 int) int {
@@ -152,4 +333,35 @@ func arrAssign(i int) {
 	}()
 
 	arr[i] = 10
+}
+
+func swap2(x *int, y *int) {
+	temp := *x
+	*x = *y
+	*y = temp
+}
+
+type Book struct {
+	title   string
+	author  string
+	subject string
+	id      int
+}
+
+func printBook(book Book) {
+	fmt.Println("the title of the book is", book.title)
+	fmt.Println("the author of the book is", book.author)
+	fmt.Println("the subject of the book is", book.subject)
+	fmt.Println("the id of the book is", book.id)
+}
+
+func printBook2(bookPtr *Book) {
+	fmt.Println("the title of the book is", bookPtr.title)
+	fmt.Println("the author of the book is", bookPtr.author)
+	fmt.Println("the subject of the book is", bookPtr.subject)
+	fmt.Println("the id of the book is", bookPtr.id)
+}
+
+func printSlice(slice []int) {
+	fmt.Printf("len = %d, cap = %d, slice = %v\n", len(slice), cap(slice), slice)
 }
