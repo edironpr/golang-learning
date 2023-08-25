@@ -287,6 +287,9 @@ func main() {
 	var devideRes float64
 	devideRes = float64(sum) / float64(count)
 	fmt.Printf("%f\n", devideRes)
+
+	var bo Book
+	fmt.Println(bo)
 }
 
 func max(n1, n2 int) int {
