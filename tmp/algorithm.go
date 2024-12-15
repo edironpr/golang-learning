@@ -186,3 +186,52 @@ func (this *RandomizedSet) GetRandom() int {
  * param_2 := obj.Remove(val);
  * param_3 := obj.GetRandom();
  */
+
+// 238. 除自身以外数组的乘积
+func productExceptSelf(nums []int) []int {
+	// 构建左右乘积数组
+	// 空间复杂度 O(n)
+
+	n := len(nums)
+
+	L, R, answer := make([]int, n), make([]int, n), make([]int, n)
+
+	L[0] = 1
+	for i := 1; i < n; i++ {
+		L[i] = nums[i - 1] * L[i - 1]
+	}
+
+	R[n - 1] = 1
+	for i := n - 2; i >= 0; i-- {
+		R[i] = nums[i + 1] * R[i + 1]
+	}
+
+	for i := 0; i < n; i++ {
+		answer[i] = L[i] * R[i]
+	}
+
+	return answer
+}
+
+// 238. 除自身以外数组的乘积
+func productExceptSelf2(nums []int) []int {
+	// 用结果数组承载左侧乘积，最后计算结果的同时计算右侧乘积
+	// 空间复杂度 O(1)
+
+	n := len(nums)
+
+	answer := make([]int, n)
+
+	answer[0] = 1
+	for i := 1; i < n; i++ {
+		answer[i] = nums[i - 1] * answer[i - 1]
+	}
+
+	R := 1
+	for i := n - 1; i >= 0; i-- {
+		answer[i] = answer[i] * R
+		R *= nums[i] // 右侧乘积
+	}
+
+	return answer
+}
