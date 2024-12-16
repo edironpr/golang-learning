@@ -198,12 +198,12 @@ func productExceptSelf(nums []int) []int {
 
 	L[0] = 1
 	for i := 1; i < n; i++ {
-		L[i] = nums[i - 1] * L[i - 1]
+		L[i] = nums[i-1] * L[i-1]
 	}
 
-	R[n - 1] = 1
+	R[n-1] = 1
 	for i := n - 2; i >= 0; i-- {
-		R[i] = nums[i + 1] * R[i + 1]
+		R[i] = nums[i+1] * R[i+1]
 	}
 
 	for i := 0; i < n; i++ {
@@ -224,7 +224,7 @@ func productExceptSelf2(nums []int) []int {
 
 	answer[0] = 1
 	for i := 1; i < n; i++ {
-		answer[i] = nums[i - 1] * answer[i - 1]
+		answer[i] = nums[i-1] * answer[i-1]
 	}
 
 	R := 1
@@ -292,4 +292,36 @@ func candy(ratings []int) int {
 	}
 
 	return count
+}
+
+// 42. 接雨水
+func trap(height []int) int {
+	// 双指针
+
+	// 1. 初始化两个指针 left = 0 和 right = height。length - 1。
+	// 2． 当 left ＜ right 时向中间移动两个指针：
+	// 	- 如果 height[left] < height[right] 说明储水量依赖于 height[left] 的高度（可能构成低洼的右边界很大）
+	//		- 如果 height[left] > left_max 说明没有或超出左边边界，不构成低洼，left_max = height[left] 。
+	// 		- 如果 height[left] <= left_max 说明构成低洼，往答案中累加积水量。ans += left_max - height[left]
+	//		- 前进 left。left++
+	//	- 如果 height[left] >= height[right] 说明储水量依赖于 height[right] 的高度（可能构成低洼的左边界很大）
+	//		- 如果 height[right] > right_max 说明没有或超出右边边界，不构成低洼，right_max = height[right]
+	// 		- 如果 height[right] <= right_max 说明构成低洼，往答案中累加积水量。ans += right_max - height[right]
+	//		- 前进 right。right--
+
+	ans, l, lMax, r, rMax := 0, 0, 0, len(height)-1, 0
+
+	for l < r {
+		if height[l] < height[r] {
+			lMax = max(lMax, height[l])
+			ans += lMax - height[l]
+			l++
+		} else {
+			rMax = max(rMax, height[r])
+			ans += rMax - height[r]
+			r--
+		}
+	}
+
+	return ans
 }
