@@ -235,3 +235,61 @@ func productExceptSelf2(nums []int) []int {
 
 	return answer
 }
+
+// 134. 加油站
+func canCompleteCircuit(gas []int, cost []int) int {
+	// 图像法
+	// 能否跑完环路：「总加油量 - 总耗油量」是否 >= 0
+	// 找出发站（如果能跑完环路）：将每一站的「加油量-耗油量」累加差值作图，找到最低点，最低点就是出发点（最低点即油箱油量最少的一站，将这一站作为出发站，其余每一站的油箱油量只多不少）
+
+	// 油箱油量、油箱最低油量、出发站
+	sum, minSum, start := 0, 0, 0
+	for i := 0; i < len(gas); i++ { // 无论从哪一站出发，最低点都是确定的一站，因为每站的相对关系不变，这里假设从0站出发进行计算
+		sum += gas[i] - cost[i]
+		if sum < minSum {
+			// 经过第 i 站，油箱油量达到新低
+			minSum = sum
+			// 第 i+1 站，就是最低点（起点）
+			start = i + 1
+		}
+	}
+
+	if sum < 0 {
+		return -1
+	}
+
+	if start == len(gas) {
+		return 0
+	}
+
+	return start
+}
+
+// 135. 分发糖果
+func candy(ratings []int) int {
+	// 分别从左、右按照「大了就加」的规则得出每人的糖果数，最后取两者中更大的数即可
+
+	n := len(ratings)
+	left := make([]int, n)
+	count := 0
+
+	for i, r := range ratings {
+		if i > 0 && r > ratings[i-1] {
+			left[i] = left[i-1] + 1
+		} else {
+			left[i] = 1
+		}
+	}
+
+	right := 0
+	for i := n - 1; i >= 0; i-- {
+		if i < n-1 && ratings[i] > ratings[i+1] {
+			right++
+		} else {
+			right = 1
+		}
+		count += max(left[i], right)
+	}
+
+	return count
+}
