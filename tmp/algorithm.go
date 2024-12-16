@@ -325,3 +325,21 @@ func trap(height []int) int {
 
 	return ans
 }
+
+// 13. 罗马数字转整数
+func romanToInt(s string) int {
+	var symbolValues = map[byte]int{'I': 1, 'V': 5, 'X': 10, 'L': 50, 'C': 100, 'D': 500, 'M': 1000}
+
+	n := len(s)
+	ans := 0
+	for i, c := range s {
+		value := symbolValues[byte(c)]
+		// 当前位置的元素比下个位置的元素小，就减去当前值，否则加上当前值
+		if i < n-1 && value < symbolValues[s[i+1]] {
+			ans -= value
+		} else {
+			ans += value
+		}
+	}
+	return ans
+}
